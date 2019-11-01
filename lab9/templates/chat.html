@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='main.css') }}">
+    <title>{% block title %}kvlt{% endblock %}</title>
+</head>
+<body>
+    <header>
+        <form action="{{ url_for('logout') }}">
+            Logged in as {{ username }} <input type="submit" value="Logout">
+        </form>
+    </header>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='message-box.css') }}">
+
+    <div id="msg-box">
+        {% include 'messages.html' %}
+    </div>
+
+    <form id="msg-form">
+        <input id="message" type="text" placeholder="Enter message...">
+        <input type="submit" value="Send">
+    </form>
+</body>
+
+<script type="text/javascript">
+    var msg_input = document.getElementById("message")
+
+    document.getElementById("msg-form").onsubmit = function(e) {
+        e.preventDefault()
+        send_message()
+    }
+
+    // Sends a message to the server (AJAX)
+    function send_message() {
+        var msg_box = document.getElementById("msg-box")
+
+        var xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function() {
+            if (this.readyState == 4 && this.status == 200) {
+                msg_box.innerHTML = this.responseText;
+                msg_input.value = "";
+                msg_box.scrollTo(0, msg_box.scrollHeight);
+            }
+        };
+
+        var msg = msg_input.value
+        var url = '{{ url_for("send_message") }}?&msg=' + msg
+        xhttp.open('GET', url, true);
+        xhttp.send();
+    }
+
+    function refresh() {
+        var msg_box = document.getElementById("msg-box")
+
+        var xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function() {
+            if (this.readyState == 4 && this.status == 200) {
+                msg_box.innerHTML = this.responseText;
+                msg_box.scrollTo(0, msg_box.scrollHeight);
+            }
+        };
+        var url = '{{ url_for("get_messages") }}'
+        xhttp.open('GET', url, true);
+        xhttp.send();
+
+        // Refresh the chat window every 3 seconds
+        setTimeout(function() {
+            refresh()
+        }, 3000);
+    }
+
+    refresh();
+
+    </script>
+</html>

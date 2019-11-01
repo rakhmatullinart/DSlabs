@@ -1,0 +1,31 @@
+#msg-box {
+    margin: 10px 0px 15px 0px;
+    overflow-y: scroll;
+    overflow-x: hidden;
+    height: 75vh;
+}
+
+.msg {
+    padding: 10px;
+    display: block;
+}
+
+.msg-author {
+    margin: 0;
+    display: inline;
+}
+
+.msg-date {
+    margin: 0;
+    color: rgba(180, 180, 180, 0.85);
+    display: inline;
+}
+
+.msg-content {
+    margin: 0;
+    margin-top: 10px;
+}
+
+.message {
+    width: auto;
+}
